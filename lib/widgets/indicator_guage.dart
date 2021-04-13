@@ -1,12 +1,79 @@
+import 'package:deeppsx/models/signal.dart';
+import 'package:deeppsx/style/style.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 
 class RadialGuage extends StatefulWidget {
+  final Signal signal;
+  RadialGuage({Key key, this.signal}) : super(key: key);
+
   @override
-  _RadialGuageState createState() => _RadialGuageState();
+  _RadialGuageState createState() => _RadialGuageState(signal);
 }
 
 class _RadialGuageState extends State<RadialGuage> {
+  final Signal signal;
+  String _signalString;
+  int _finalValue;
+
+  _RadialGuageState(this.signal){
+    _getFinalValue();
+    _getSignalString();
+  }
+
+  _getFinalValue(){
+    switch(signal){
+      case Signal.Sell:{
+        _finalValue=25;
+      }
+      break;
+      case Signal.StrongSell:{
+        _finalValue=50;
+      }
+      break;
+      case Signal.Buy:{
+        _finalValue=75;
+      }
+      break;
+      case Signal.StrongBuy:{
+        _finalValue=100;
+      }
+      break;
+      default: {
+        _finalValue=100;
+      }
+
+    }
+  }
+  _getSignalString() {
+    switch (signal) {
+      case Signal.Sell:
+        {
+          _signalString = 'Sell';
+        }
+        break;
+      case Signal.StrongSell:
+        {
+          _signalString = 'Strong Sell';
+        }
+        break;
+      case Signal.Buy:
+        {
+          _signalString = 'Buy';
+        }
+        break;
+      case Signal.StrongBuy:
+        {
+          _signalString = 'Strong Buy';
+        }
+        break;
+      default:
+        {
+          _signalString = 'Strong Buy';
+        }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return _buildRadialNonLinearLabel();
@@ -14,6 +81,7 @@ class _RadialGuageState extends State<RadialGuage> {
   /// Returns the non-linear axis label gauge
   SfRadialGauge _buildRadialNonLinearLabel() {
     return SfRadialGauge(
+      backgroundColor: Colors.transparent,
       enableLoadingAnimation: true,
       key: null,
       animationDuration: 2500,
@@ -21,14 +89,14 @@ class _RadialGuageState extends State<RadialGuage> {
         RadialAxis(
             labelOffset: 0,
             axisLineStyle: AxisLineStyle(
-                thicknessUnit: GaugeSizeUnit.factor, thickness: 0.10),
-            radiusFactor: 0.4,
+                thicknessUnit: GaugeSizeUnit.factor, thickness: 0.10,color: Style.primraryColor),
+            radiusFactor: 0.8,
             minimum: 0,
             showTicks: false,
-            maximum: 80,
-            axisLabelStyle: GaugeTextStyle(fontSize: 2),
+            maximum: 100,
             // Added custom axis renderer that extended from RadialAxisRenderer
             onCreateAxisRenderer: handleCreateAxisRenderer,
+            showAxisLine: true,
             pointers: <GaugePointer>[
               NeedlePointer(
                   enableAnimation: true,
@@ -40,7 +108,7 @@ class _RadialGuageState extends State<RadialGuage> {
                     0.75
                   ], begin: Alignment.bottomCenter, end: Alignment.topCenter),
                   animationType: AnimationType.easeOutBack,
-                  value: 60,
+                  value: _finalValue.toDouble(),
                   lengthUnit: GaugeSizeUnit.factor,
                   animationDuration: 1300,
                   needleStartWidth: 3,
@@ -50,17 +118,31 @@ class _RadialGuageState extends State<RadialGuage> {
                     knobRadius: 0,
                   )),
               RangePointer(
-                  value: 60,
+                  value: _finalValue.toDouble(),
                   width: 0.15,
                   sizeUnit: GaugeSizeUnit.factor,
                   color: _pointerColor,
                   animationDuration: 1300,
                   animationType: AnimationType.easeOutBack,
                   gradient: const SweepGradient(
-                      colors: <Color>[Color(0xFF9E40DC), Color(0xFFE63B86)],
+                      colors: <Color>[Color(0xff4390EA),Color(0xffE63487)],
                       stops: <double>[0.25, 0.75]),
                   enableAnimation: true)
-            ])
+            ],
+            annotations: <GaugeAnnotation>[
+              GaugeAnnotation(
+                  angle: 90,
+                  axisValue: 8,
+                  positionFactor: 1.1,
+                  widget: Text(_signalString,
+                      style: TextStyle(
+                          fontSize:16,
+                          fontWeight: Style.getFontWeight('regular'),
+                          color: Colors.white
+                      ))
+              )
+            ],
+        )
       ],
     );
   }
@@ -81,61 +163,6 @@ class _CustomAxisRenderer extends RadialAxisRenderer {
   @override
   List<CircularAxisLabel> generateVisibleLabels() {
     final List<CircularAxisLabel> _visibleLabels = <CircularAxisLabel>[];
-    for (num i = 0; i < 9; i++) {
-      final double _value = _calculateLabelValue(i);
-      final CircularAxisLabel label = CircularAxisLabel(
-          axis.axisLabelStyle, _value.toInt().toString(), i, false);
-      label.value = _value;
-      _visibleLabels.add(label);
-    }
-
     return _visibleLabels;
-  }
-
-  /// Returns the factor(0 to 1) from value to place the labels in an axis.
-  @override
-  double valueToFactor(double value) {
-    if (value >= 0 && value <= 2) {
-      return (value * 0.125) / 2;
-    } else if (value > 2 && value <= 5) {
-      return (((value - 2) * 0.125) / (5 - 2)) + (1 * 0.125);
-    } else if (value > 5 && value <= 10) {
-      return (((value - 5) * 0.125) / (10 - 5)) + (2 * 0.125);
-    } else if (value > 10 && value <= 20) {
-      return (((value - 10) * 0.125) / (20 - 10)) + (3 * 0.125);
-    } else if (value > 20 && value <= 30) {
-      return (((value - 20) * 0.125) / (30 - 20)) + (4 * 0.125);
-    } else if (value > 30 && value <= 50) {
-      return (((value - 30) * 0.125) / (50 - 30)) + (5 * 0.125);
-    } else if (value > 50 && value <= 100) {
-      return (((value - 50) * 0.125) / (100 - 50)) + (6 * 0.125);
-    } else if (value > 100 && value <= 150) {
-      return (((value - 100) * 0.125) / (150 - 100)) + (7 * 0.125);
-    } else {
-      return 1;
-    }
-  }
-
-  /// To return the label value based on interval
-  double _calculateLabelValue(num value) {
-    if (value == 0) {
-      return 0;
-    } else if (value == 1) {
-      return 2;
-    } else if (value == 2) {
-      return 5;
-    } else if (value == 3) {
-      return 10;
-    } else if (value == 4) {
-      return 20;
-    } else if (value == 5) {
-      return 30;
-    } else if (value == 6) {
-      return 50;
-    } else if (value == 7) {
-      return 100;
-    } else {
-      return 150;
-    }
   }
 }

@@ -11,13 +11,14 @@ class CustomContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 30, horizontal: 30),
+      padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(30),
           color: Style.secodryColor),
       width: double.infinity,
 
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -25,7 +26,7 @@ class CustomContainer extends StatelessWidget {
             sectionTitle.toUpperCase(),
             style: Style.customContainerSectionTitleTextStyle,
           ),
-          SizedBox(height: 20,),
+          SizedBox(height: 10,),
           child
         ],
       ),
