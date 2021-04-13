@@ -1,3 +1,4 @@
+import 'package:deeppsx/style/style.dart';
 import 'package:deeppsx/widgets/responsive_container.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_builder/responsive_builder.dart';
@@ -15,7 +16,7 @@ class SearchSection extends StatelessWidget {
       sizingInformation: sizingInformation,
       child: Container(),
       desktopWidthFactor: 0.17,
-      color: Colors.green,
+      color: Style.secodryColor,
     );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:deeppsx/home.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'style/style.dart';
 
 void main() {
@@ -19,6 +20,7 @@ class _DeepPsxState extends State<DeepPsx> {
       theme: ThemeData(
         primaryColor: Style.primraryColor,
         accentColor: Style.secodryColor,
+        fontFamily: "Montserrat",
       ),
       home: DeepPsxHome(),
       debugShowCheckedModeBanner: false,

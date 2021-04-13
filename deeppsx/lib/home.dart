@@ -4,7 +4,6 @@ import 'package:deeppsx/sections/stock_and_logo_section.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_builder/responsive_builder.dart';
-
 import 'style/style.dart';
 
 class DeepPsxHome extends StatelessWidget {
