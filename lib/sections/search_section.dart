@@ -16,7 +16,7 @@ class SearchSection extends StatelessWidget {
       sizingInformation: sizingInformation,
       child: Container(),
       desktopWidthFactor: 0.17,
-      color: Style.secodryColor,
+      color: Style.secondryColor,
     );
   }
 }

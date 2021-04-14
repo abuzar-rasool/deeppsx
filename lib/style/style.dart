@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 
 class Style {
-  static Color secodryColor = Color(0xff1A1D33);
-  static Color primraryColor = Color(0xff181926);
-  static Color logoColorPink = Color(0xffE63487);
-  static Color logoColorBlue = Color(0xff4390EA);
-  static Color headingColor = Colors.white;
-  static Color textColor = Color(0xff515467);
-  static double borderRadiusExtreme = 50;
-  static double borderRadiusLight = 50;
+  static const Color secondryColor = Color(0xff1A1D33);
+  static const Color primraryColor = Color(0xff181926);
+  static const Color logoColorPink = Color(0xffE63487);
+  static const Color logoColorBlue = Color(0xff4390EA);
+  static const Color headingColor = Colors.white;
+  static const Color textColor = Color(0xff515467);
+  static const double borderRadiusExtreme = 50;
+  static const double borderRadiusLight = 50;
   static FontWeight getFontWeight(String style) {
     Map<String, FontWeight> weights = {
       'thin': FontWeight.w100,

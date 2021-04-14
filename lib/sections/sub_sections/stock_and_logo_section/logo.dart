@@ -41,7 +41,7 @@ class _LogoState extends State<Logo> with SingleTickerProviderStateMixin {
       flex: _calculateFlex(),
       child: Container(
         decoration: BoxDecoration(
-          color: Style.secodryColor,
+          color: Style.secondryColor,
           borderRadius: BorderRadius.only(
               bottomRight: Radius.circular(Style.borderRadiusExtreme)),
         ),

@@ -1,4 +1,5 @@
 import 'package:deeppsx/home.dart';
+import 'package:deeppsx/models/graphtab_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'style/style.dart';
@@ -15,15 +16,20 @@ class DeepPsx extends StatefulWidget {
 class _DeepPsxState extends State<DeepPsx> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Deep PSX',
-      theme: ThemeData(
-        primaryColor: Style.primraryColor,
-        accentColor: Style.secodryColor,
-        fontFamily: "Montserrat",
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => GraphTabProvider()),
+      ],
+      child: MaterialApp(
+        title: 'Deep PSX',
+        theme: ThemeData(
+          primaryColor: Style.primraryColor,
+          accentColor: Style.secondryColor,
+          fontFamily: "Montserrat",
+        ),
+        home: DeepPsxHome(),
+        debugShowCheckedModeBanner: false,
       ),
-      home: DeepPsxHome(),
-      debugShowCheckedModeBanner: false,
     );
   }
 }
