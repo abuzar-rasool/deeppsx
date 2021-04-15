@@ -27,7 +27,7 @@ dependencies:
   responsive_builder: ^0.4.1
   provider: ^5.0.0
   syncfusion_flutter_gauges: ^19.1.55
-  md2_tab_indicator: ^1.0.2
+  syncfusion_flutter_charts: ^19.1.56
 
 dev_dependencies:
   flutter_test:

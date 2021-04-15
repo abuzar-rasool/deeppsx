@@ -11,7 +11,7 @@ class Style {
   static const Color headingColor = Colors.white;
   static const Color textColor = Color(0xff515467);
   static const double borderRadiusExtreme = 50;
-  static const double borderRadiusLight = 50;
+  static const double borderRadiusLight = 10;
   static FontWeight getFontWeight(String style) {
     Map<String, FontWeight> weights = {
       'thin': FontWeight.w100,
