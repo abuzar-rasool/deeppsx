@@ -1,5 +1,7 @@
+import 'package:deeppsx/models/stock_data.dart';
 import 'package:deeppsx/style/style.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class StockDetails extends StatelessWidget {
   const StockDetails({
@@ -18,7 +20,7 @@ class StockDetails extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "AAPL",
+              'AAPL',
               style: Style.headerStockNameTextStyle,
             ),
             Text(

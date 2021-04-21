@@ -1,5 +1,6 @@
 import 'package:deeppsx/home.dart';
 import 'package:deeppsx/models/graphtab_provider.dart';
+import 'package:deeppsx/models/stock_data.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'style/style.dart';
@@ -19,6 +20,7 @@ class _DeepPsxState extends State<DeepPsx> {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => GraphTabProvider()),
+        ChangeNotifierProvider(create : (_) => StockDataProvider()),
       ],
       child: MaterialApp(
         title: 'Deep PSX',

@@ -1,6 +1,8 @@
 import 'package:deeppsx/sections/sub_sections/stock_and_logo_section/logo_and_stock_details.dart';
 import 'package:deeppsx/sections/sub_sections/stock_and_logo_section/stock_graphs.dart';
 import 'package:deeppsx/widgets/graph_tab/graph_tab.dart';
+import 'package:deeppsx/widgets/graphs/price_prediction.dart';
+import 'package:deeppsx/widgets/graphs/techinal_indicator.dart';
 import 'package:deeppsx/widgets/responsive_container.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_builder/responsive_builder.dart';
@@ -22,16 +24,16 @@ class StockAndLogoSection extends StatelessWidget {
           StockGraphs(
             graphTabs: [
               GraphTab(
-                tabName: 'Graph1',
+                tabName: 'PRICE PREDICTION',
+                child: PricePredicationGraph(),
+              ),
+              GraphTab(
+                tabName: 'SENTIMENT ANALYSIS',
                 child: Container(),
               ),
               GraphTab(
-                tabName: 'Graph2',
-                child: Container(),
-              ),
-              GraphTab(
-                tabName: 'Graph3',
-                child: Container(),
+                tabName: 'TECHNICAL INDICATORS',
+                child: TechnicalIndicatorGraph(),
               ),
             ],
           )
