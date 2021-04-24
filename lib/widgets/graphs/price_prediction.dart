@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
+
 class PricePredicationGraph extends StatefulWidget {
   @override
   _PricePredicationGraphState createState() => _PricePredicationGraphState();
@@ -14,44 +15,82 @@ class _PricePredicationGraphState extends State<PricePredicationGraph> {
   TooltipBehavior _tooltipBehavior;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    _tooltipBehavior = TooltipBehavior(
-        enable: true,animationDuration: 1);
+    _tooltipBehavior = TooltipBehavior(enable: true, animationDuration: 1);
     _stockData = context.read<StockDataProvider>().currentStockData;
   }
+
+  List<double> getPredictionRanges(){
+    List<double> result =[];
+    _stockData.dailyData.getRange(_stockData.dailyData.length-28,_stockData.dailyData.length).toList().forEach((element) {
+      result.add(element.predictedPrice);
+      result.add(element.originalPrice);
+    });
+    print(result);
+    return result.where((element) => element!=null).toList();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
-    child: SfCartesianChart(
-      zoomPanBehavior: ZoomPanBehavior(enablePanning: true,enableMouseWheelZooming: true),
-      tooltipBehavior: _tooltipBehavior,
-      plotAreaBorderColor: Style.textColor,
-      primaryXAxis: DateTimeAxis(
-        zoomFactor: 0.5,
-        zoomPosition: 1,
-        dateFormat: DateFormat('MMM dd, yy'),
-          labelIntersectAction: AxisLabelIntersectAction.multipleRows,
-        majorGridLines: MajorGridLines(color: Style.textColor),
-        minorGridLines: MinorGridLines(width: 0),
-        desiredIntervals: 4,
-        enableAutoIntervalOnZooming: true,
-      ),
-      primaryYAxis: NumericAxis(
+      child: SfCartesianChart(
+        tooltipBehavior: _tooltipBehavior,
+        zoomPanBehavior: ZoomPanBehavior(enablePanning: true),
+        plotAreaBorderColor: Style.textColor,
+        primaryXAxis: DateTimeAxis(
+          minimum: _stockData.currentDate.subtract(Duration(days: 7)),
+          zoomFactor: 0.2,
+          zoomPosition: 0.2,
           autoScrollingMode: AutoScrollingMode.end,
+          dateFormat: DateFormat('MMM dd'),
+          labelIntersectAction: AxisLabelIntersectAction.multipleRows,
           majorGridLines: MajorGridLines(color: Style.textColor),
-          minorGridLines: MinorGridLines(width: 0),
-        labelFormat: '{value} Rs'
+          minorGridLines: MinorGridLines(width: 1, color: Style.textColor.withAlpha(50)),
+          interval: 7,
+          intervalType: DateTimeIntervalType.days,
+        ),
+        primaryYAxis: NumericAxis(
+            minimum: getPredictionRanges().reduce((curr, next) => curr < next? curr: next)-10,
+            maximum: getPredictionRanges().reduce((curr, next) => curr > next? curr: next)+10,
+            enableAutoIntervalOnZooming: true,
+            desiredIntervals: 5,
+            majorGridLines: MajorGridLines(color: Style.textColor),
+            minorGridLines: MinorGridLines(width: 0),
+            labelFormat: '{value} Rs'),
+        legend: Legend(
+          isVisible: true,
+          position: LegendPosition.bottom,
+          textStyle: TextStyle(
+            color: Style.headingColor,
+          ),
+        ),
+        series: <ChartSeries>[
+          LineSeries<DailyStockData, DateTime>(
+            dataSource: _stockData.dailyData.where((element) => element.date.isAfter(_stockData.currentDate.subtract(Duration(days: 14)))).toList(),
+            xValueMapper: (DailyStockData data, _) => data.date,
+            yValueMapper: (DailyStockData data, _) =>
+                data.date.isAfter(_stockData.currentDate)
+                    ? null
+                    : data.originalPrice,
+            pointColorMapper: (DailyStockData data, _) => Style.logoColorBlue,
+            enableTooltip: true,
+            name: 'Original Price',
+          ),
+          LineSeries<DailyStockData, DateTime>(
+            dataSource: _stockData.dailyData,
+            xValueMapper: (DailyStockData data, _) => data.date,
+            yValueMapper: (DailyStockData data, _) =>
+                data.date.isAfter(_stockData.currentDate)
+                    ? data.predictedPrice
+                    : data.date.isAtSameMomentAs(_stockData.currentDate)
+                        ? data.originalPrice
+                        : null,
+            pointColorMapper: (DailyStockData data, _) => Style.logoColorPink,
+            enableTooltip: true,
+            name: 'Price Prediction',
+          ),
+        ],
       ),
-      series: <ChartSeries>[
-        LineSeries<DailyStockData,DateTime>(dataSource: _stockData.dailyData,
-          xValueMapper: (DailyStockData data,_) => data.date,
-          yValueMapper: (DailyStockData data,_) => data.predictedPrice,
-          enableTooltip: true,
-          name: 'Price Prediction',
-        )
-      ],
-    ),
     );
   }
 }

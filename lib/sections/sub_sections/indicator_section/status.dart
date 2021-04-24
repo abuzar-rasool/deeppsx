@@ -25,7 +25,7 @@ class Status extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text('123 USD', style: Style.stockStatusPriceTextStyle),
+              Text('123 PKR', style: Style.stockStatusPriceTextStyle),
               Text(
                 '+0.85 (0.70%)',
                 style: Style.stockStatusPriceVariationTextStyle,

@@ -2,6 +2,7 @@ import 'package:deeppsx/sections/sub_sections/stock_and_logo_section/logo_and_st
 import 'package:deeppsx/sections/sub_sections/stock_and_logo_section/stock_graphs.dart';
 import 'package:deeppsx/widgets/graph_tab/graph_tab.dart';
 import 'package:deeppsx/widgets/graphs/price_prediction.dart';
+import 'package:deeppsx/widgets/graphs/sentiment_analysis.dart';
 import 'package:deeppsx/widgets/graphs/techinal_indicator.dart';
 import 'package:deeppsx/widgets/responsive_container.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +30,7 @@ class StockAndLogoSection extends StatelessWidget {
               ),
               GraphTab(
                 tabName: 'SENTIMENT ANALYSIS',
-                child: Container(),
+                child: SentimentAnalysisGraph(),
               ),
               GraphTab(
                 tabName: 'TECHNICAL INDICATORS',

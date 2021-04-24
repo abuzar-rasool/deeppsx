@@ -23,7 +23,7 @@ class IndicatorSection extends StatelessWidget {
          Spacer(),
           Status(),
           SizedBox(height: 20,),
-          Indicator(signal:Signal.StrongSell),
+          Indicator(signal:Signal.Sell),
         ]),
       ),
       desktopWidthFactor: 0.23,

@@ -20,11 +20,11 @@ class StockDetails extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'AAPL',
+              '${context.watch<StockDataProvider>().currentStockData.stockCode}',
               style: Style.headerStockNameTextStyle,
             ),
             Text(
-              "Apple Inc",
+              '${context.watch<StockDataProvider>().currentStockData.stockCompanyName}',
               style: Style.headerCompanyNameTextStyle,)
           ],
         ),
