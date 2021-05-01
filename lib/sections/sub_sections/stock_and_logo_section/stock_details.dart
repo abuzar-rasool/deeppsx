@@ -1,6 +1,7 @@
 import 'package:deeppsx/models/stock_data.dart';
 import 'package:deeppsx/style/style.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class StockDetails extends StatelessWidget {
@@ -25,7 +26,11 @@ class StockDetails extends StatelessWidget {
             ),
             Text(
               '${context.watch<StockDataProvider>().currentStockData.stockCompanyName}',
-              style: Style.headerCompanyNameTextStyle,)
+              style: Style.headerCompanyNameTextStyle,),
+            Text(
+              '${DateFormat.yMMMMd('en_US').format(context.watch<StockDataProvider>().currentStockData.currentDate)}',
+              style: Style.headerCompanyNameTextStyle.copyWith(fontSize: 12),
+            )
           ],
         ),
       ),
