@@ -85,22 +85,29 @@ class SearchTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical:8.0),
-      child: CustomContainer(
-        backgroundColor: context.read<StockDataProvider>().currentStockData.stockCode==stockCode ? Style.logoColorBlue : Style.primraryColor,
-        padding: 0,
-        borderRadius: 20,
-        child: Container(
-            width: double.infinity,
-            height: 50,
-            child: Center(
-              child: Text(
-                stockCode.toUpperCase(),
-                softWrap: true,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: Style.headerCompanyNameTextStyle,
-              ),
-            )),
+      child: GestureDetector(
+        onTap: (){
+          if(context.read<StockDataProvider>().currentStockData.stockCode!=stockCode){
+            context.read<StockDataProvider>().setStock(stockCode);
+          }
+        },
+        child: CustomContainer(
+          backgroundColor: context.read<StockDataProvider>().currentStockData.stockCode==stockCode ? Style.logoColorPink : Style.primraryColor,
+          padding: 0,
+          borderRadius: 20,
+          child: Container(
+              width: double.infinity,
+              height: 50,
+              child: Center(
+                child: Text(
+                  stockCode.toUpperCase(),
+                  softWrap: true,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Style.headerCompanyNameTextStyle,
+                ),
+              )),
+        ),
       ),
     );
   }
