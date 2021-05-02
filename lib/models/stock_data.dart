@@ -30,6 +30,16 @@ class StockData{
     List<List<dynamic>> dataList= await CSVHelper.getCSVList(url);
     _parseCSVList(dataList);
   }
+
+  getPriceFromDate(DateTime date){
+    double result = 0.0;
+    dailyDataWithoutPrediction.forEach((element) {
+      if (element.date.difference(date).inDays == 0) {
+        result =  element.open;
+      }
+    });
+    return result;
+  }
 }
 
 class DailyStockData{

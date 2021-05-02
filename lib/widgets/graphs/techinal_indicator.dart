@@ -6,6 +6,10 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
+import '../../models/stock_data.dart';
+import '../../models/stock_data.dart';
+import '../../models/stock_data.dart';
+
 class TechnicalIndicatorGraph extends StatefulWidget {
   @override
   _TechnicalIndicatorGraphState createState() =>
@@ -15,60 +19,168 @@ class TechnicalIndicatorGraph extends StatefulWidget {
 class _TechnicalIndicatorGraphState extends State<TechnicalIndicatorGraph> {
   StockData _stockData;
   ZoomPanBehavior _zoomPanBehavior;
+  int mainXaxisVisibleDays = 100;
+  List<bool> indicatorsVisible = [false, false, false];
 
   @override
   void initState() {
     super.initState();
     _stockData = context.read<StockDataProvider>().currentStockData;
+    _zoomPanBehavior =  ZoomPanBehavior(
+        enableDoubleTapZooming: true,
+        enablePanning: true
+    );
 
   }
 
   List<double> getLowsAndHighs(){
-    List<double> result =[];
-    _stockData.dailyData.getRange(_stockData.dailyData.length-74,_stockData.dailyData.length-14).forEach((element) {
-      result.add(element.low);
-      result.add(element.high);
-    });
-    return result.where((element) => element!=null).toList();
+    List<double> highsAndLows =[];
+
+    for (int day = 0; day < mainXaxisVisibleDays; day++) {
+      DateTime dateNeeded = _stockData.dailyDataWithoutPrediction.last.date.subtract(Duration(days: (mainXaxisVisibleDays-day)));
+      double highLow = _stockData.getPriceFromDate(dateNeeded);
+      if (highLow != 0) {
+        highsAndLows.add((highLow));
+      }
+    }
+    highsAndLows.sort();
+    List<double> result = [highsAndLows[0],highsAndLows[highsAndLows.length-1]];
+    return result;
   }
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: SfCartesianChart(
-        zoomPanBehavior: ZoomPanBehavior(
-            enableMouseWheelZooming: true,
-            enablePanning: true,
-        ),
-        tooltipBehavior: TooltipBehavior(enable: true, animationDuration: 1),
-        primaryXAxis: DateTimeAxis(
-          intervalType: DateTimeIntervalType.days,
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              DropdownButton<String>(
+                hint: Text("Indicators", style: TextStyle(color: Colors.white),),
+                items: <String>['RSI', 'Bollinger Bands', 'MACD'].map((String value) {
+                  return new DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+                onChanged: (indicator) {
+                  if (indicator == 'RSI') {
+                    indicatorsVisible[0] = !indicatorsVisible[0];
+                    setState(() {
+                    });
 
-          majorGridLines: MajorGridLines(color: Style.textColor),
-          minorGridLines: MinorGridLines(width: 0),
-          name: 'x-prim'
-        ),
-        primaryYAxis: NumericAxis(
-            //visibleMinimum: getLowsAndHighs().reduce((curr, next) => curr < next? curr: next),
-            //visibleMaximum: getLowsAndHighs().reduce((curr, next) => curr > next? curr: next),
-            numberFormat: NumberFormat.currency(
-          symbol: 'Rs ',
-        ),
-          name: 'y-prim',
+                  }
+                  else if (indicator == 'Bollinger Bands') {
+                    indicatorsVisible[1] = !indicatorsVisible[1];
+                    setState(() {
+                    });
+                  }
+                  else if (indicator == 'MACD') {
+                    indicatorsVisible[2] = !indicatorsVisible[2];
+                    setState(() {
 
-          majorGridLines: MajorGridLines(color: Style.textColor),
-          minorGridLines: MinorGridLines(width: 0),
-        ),
-        indicators: [
-          BollingerBandIndicator(isVisible: true,xAxisName: 'x-prim',yAxisName: 'y-prim')
-        ],
-        series: <ChartSeries>[
-          CandleSeries<DailyStockData, dynamic>(
-              dataSource: _stockData.dailyDataWithoutPrediction,
-              xValueMapper: (DailyStockData data, _) => data.date,
-              lowValueMapper: (DailyStockData data, _) => data.low,
-              highValueMapper: (DailyStockData data, _) => data.high,
-              openValueMapper: (DailyStockData data, _) => data.open,
-              closeValueMapper: (DailyStockData data, _) => data.close)
+                    });
+                  }
+                },
+              ),
+              TextButton(
+                  child: Text('+',
+                    style: TextStyle(
+                        fontSize: 25,
+                        color: Colors.white
+                    ),
+                  ),
+                  onPressed: ()
+                  {
+                    _zoomPanBehavior.zoomIn();
+                  }
+              ),
+              TextButton(
+                  child: Text('-',
+                    style: TextStyle(
+                        fontSize: 25,
+                        color: Colors.white
+                    ),
+                  ),
+                  onPressed: ()
+                  {
+                    _zoomPanBehavior.zoomOut();
+                  }
+              ),
+            ],
+          ),
+          SfCartesianChart(
+            zoomPanBehavior: _zoomPanBehavior,
+            tooltipBehavior: TooltipBehavior(enable: true, animationDuration: 1),
+            primaryXAxis: DateTimeAxis(
+                intervalType: DateTimeIntervalType.days,
+                majorGridLines: MajorGridLines(color: Style.textColor),
+                minorGridLines: MinorGridLines(width: 0),
+                visibleMinimum: _stockData.dailyDataWithoutPrediction.last.date.subtract(Duration(days: mainXaxisVisibleDays)),
+                visibleMaximum: _stockData.dailyDataWithoutPrediction.last.date,
+
+                name: 'x-prim'
+            ),
+            primaryYAxis: NumericAxis(
+              //visibleMinimum: getLowsAndHighs().reduce((curr, next) => curr < next? curr: next),
+              //visibleMaximum: getLowsAndHighs().reduce((curr, next) => curr > next? curr: next),
+              visibleMaximum: getLowsAndHighs()[1] + 20,
+              visibleMinimum: getLowsAndHighs()[0] - 20,
+              numberFormat: NumberFormat.currency(
+                symbol: 'Rs ',
+              ),
+              name: 'y-prim',
+              majorGridLines: MajorGridLines(color: Style.textColor),
+              minorGridLines: MinorGridLines(width: 0),
+
+            ),
+
+            axes: [
+              NumericAxis(
+                name: "macd_yaxis",
+                opposedPosition: true,
+                labelPosition: ChartDataLabelPosition.outside,
+                placeLabelsNearAxisLine: true,
+              ),
+
+              NumericAxis(
+                name: "rsi_yaxis",
+                opposedPosition: true,
+                labelPosition: ChartDataLabelPosition.outside,
+                placeLabelsNearAxisLine: true,
+              )
+            ],
+
+            indicators: <TechnicalIndicators<DailyStockData, dynamic>>[
+              BollingerBandIndicator<DailyStockData, dynamic>(
+                  seriesName: "MainSeries",
+                  isVisible: indicatorsVisible[1],
+                  lowerLineColor: Colors.red,
+                  upperLineColor: Colors.green
+              ),
+              MacdIndicator<DailyStockData, dynamic>(
+                  seriesName: "MainSeries",
+                  isVisible: indicatorsVisible[2],
+                  yAxisName: "macd_yaxis"
+              ),
+              RsiIndicator<DailyStockData, dynamic>(
+                  seriesName: "MainSeries",
+                  isVisible: indicatorsVisible[0],
+                  yAxisName: "rsi_yaxis"
+              )
+            ],
+            series: <ChartSeries>[
+              CandleSeries<DailyStockData, dynamic>(
+                  name: "MainSeries",
+                  enableSolidCandles: true,
+                  dataSource: _stockData.dailyDataWithoutPrediction,
+                  xValueMapper: (DailyStockData data, _) => data.date,
+                  lowValueMapper: (DailyStockData data, _) => data.low,
+                  highValueMapper: (DailyStockData data, _) => data.high,
+                  openValueMapper: (DailyStockData data, _) => data.open,
+                  closeValueMapper: (DailyStockData data, _) => data.close)
+            ],
+          ),
         ],
       ),
     );
