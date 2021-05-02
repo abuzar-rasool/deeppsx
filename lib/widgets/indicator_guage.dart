@@ -82,13 +82,12 @@ class _RadialGuageState extends State<RadialGuage> {
 
   @override
   Widget build(BuildContext context) {
+    setState(() {
       _signalInt = context.watch<StockDataProvider>().currentStockData.dailyDataWithoutPrediction.last.signal;
       signal=_getSignal(_signalInt);
-
-      setState(() {
-        _getFinalValue();
-        _getSignalString();
-      });
+      _getFinalValue();
+      _getSignalString();
+    });
     return _buildRadialNonLinearLabel();
   }
   /// Returns the non-linear axis label gauge
@@ -100,61 +99,70 @@ class _RadialGuageState extends State<RadialGuage> {
       animationDuration: 2500,
       axes: <RadialAxis>[
         RadialAxis(
-            labelOffset: 0,
-            axisLineStyle: AxisLineStyle(
-                thicknessUnit: GaugeSizeUnit.factor, thickness: 0.10,color: Style.primraryColor),
-            radiusFactor: 0.8,
-            minimum: 0,
-            showTicks: false,
-            maximum: 100,
-            // Added custom axis renderer that extended from RadialAxisRenderer
-            onCreateAxisRenderer: handleCreateAxisRenderer,
-            showAxisLine: true,
-            pointers: <GaugePointer>[
-              NeedlePointer(
-                  enableAnimation: true,
-                  gradient: const LinearGradient(colors: <Color>[
-                    Color.fromRGBO(203, 126, 223, 0),
-                    Color(0xFFCB7EDF)
-                  ], stops: <double>[
-                    0.25,
-                    0.75
-                  ], begin: Alignment.bottomCenter, end: Alignment.topCenter),
-                  animationType: AnimationType.easeOutBack,
-                  value: _finalValue.toDouble(),
-                  lengthUnit: GaugeSizeUnit.factor,
-                  animationDuration: 1300,
-                  needleStartWidth: 3,
-                  needleEndWidth: 6,
-                  needleLength: 0.8,
-                  knobStyle: KnobStyle(
-                    knobRadius: 0,
-                  )),
-              RangePointer(
-                  value: _finalValue.toDouble(),
-                  width: 0.15,
-                  sizeUnit: GaugeSizeUnit.factor,
-                  color: _pointerColor,
-                  animationDuration: 1300,
-                  animationType: AnimationType.easeOutBack,
-                  gradient: const SweepGradient(
-                      colors: <Color>[Color(0xff4390EA),Color(0xffE63487)],
-                      stops: <double>[0.25, 0.75]),
-                  enableAnimation: true)
-            ],
-            annotations: <GaugeAnnotation>[
-              GaugeAnnotation(
-                  angle: 90,
-                  axisValue: 8,
-                  positionFactor: 1.1,
-                  widget: Text(_signalString,
-                      style: TextStyle(
-                          fontSize:16,
-                          fontWeight: Style.getFontWeight('regular'),
-                          color: Colors.white
-                      ))
-              )
-            ],
+          labelOffset: 0,
+          axisLineStyle: AxisLineStyle(
+              thicknessUnit: GaugeSizeUnit.factor, thickness: 0.10,color: Style.primraryColor),
+          radiusFactor: 0.8,
+          minimum: 0,
+          showTicks: false,
+          maximum: 100,
+          // Added custom axis renderer that extended from RadialAxisRenderer
+          onCreateAxisRenderer: handleCreateAxisRenderer,
+          showAxisLine: true,
+          pointers: <GaugePointer>[
+            NeedlePointer(
+                onValueChanged: (changed) {
+                  setState(() {
+
+                  });
+                },
+                enableAnimation: true,
+                gradient: const LinearGradient(colors: <Color>[
+                  Color.fromRGBO(203, 126, 223, 0),
+                  Color(0xFFCB7EDF)
+                ], stops: <double>[
+                  0.25,
+                  0.75
+                ], begin: Alignment.bottomCenter, end: Alignment.topCenter),
+                animationType: AnimationType.easeOutBack,
+                value: _finalValue.toDouble(),
+                lengthUnit: GaugeSizeUnit.factor,
+                animationDuration: 1300,
+                needleStartWidth: 3,
+                needleEndWidth: 6,
+                needleLength: 0.8,
+                knobStyle: KnobStyle(
+                  knobRadius: 0,
+                )),
+            RangePointer(
+                onValueChanged: (changed) {
+                  setState(() {
+                  });
+                },
+                value: _finalValue.toDouble(),
+                width: 0.15,
+                sizeUnit: GaugeSizeUnit.factor,
+                color: _pointerColor,
+                animationDuration: 1300,
+                animationType: AnimationType.easeOutBack,
+                gradient: const SweepGradient(
+                    colors: <Color>[Color(0xff4390EA),Color(0xffE63487)],
+                    stops: <double>[0.25, 0.75]),
+                enableAnimation: true)
+          ],
+          annotations: <GaugeAnnotation>[
+            GaugeAnnotation(
+                angle: 90,
+                axisValue: 8,
+                positionFactor: 1.1,
+                widget: Text(_signalString,
+                    style: TextStyle(
+                        fontSize:16,
+                        fontWeight: Style.getFontWeight('regular'),
+                        color: Colors.white
+                    ))
+            )
+          ],
         )
       ],
     );
