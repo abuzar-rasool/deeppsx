@@ -78,16 +78,13 @@ class _RadialGuageState extends State<RadialGuage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _signalInt = context.read<StockDataProvider>().currentStockData.dailyDataWithoutPrediction.last.score;
-    signal=_getSignal(_signalInt);
-    _getFinalValue();
-    _getSignalString();
   }
 
   @override
   Widget build(BuildContext context) {
       _signalInt = context.watch<StockDataProvider>().currentStockData.dailyDataWithoutPrediction.last.signal;
       signal=_getSignal(_signalInt);
+
       setState(() {
         _getFinalValue();
         _getSignalString();
