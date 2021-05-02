@@ -130,13 +130,16 @@ class _TechnicalIndicatorGraphState extends State<TechnicalIndicatorGraph> {
                 opposedPosition: true,
                 labelPosition: ChartDataLabelPosition.outside,
                 placeLabelsNearAxisLine: true,
+                isVisible: false,
               ),
 
               NumericAxis(
                 name: "rsi_yaxis",
                 opposedPosition: true,
+                isVisible: false,
                 labelPosition: ChartDataLabelPosition.outside,
                 placeLabelsNearAxisLine: true,
+                maximum: 600
               )
             ],
 
@@ -162,12 +165,16 @@ class _TechnicalIndicatorGraphState extends State<TechnicalIndicatorGraph> {
               CandleSeries<DailyStockData, dynamic>(
                   name: "MainSeries",
                   enableSolidCandles: true,
+                  showIndicationForSameValues: true,
                   dataSource: _stockData.dailyDataWithoutPrediction,
                   xValueMapper: (DailyStockData data, _) => data.date,
                   lowValueMapper: (DailyStockData data, _) => data.low,
                   highValueMapper: (DailyStockData data, _) => data.high,
                   openValueMapper: (DailyStockData data, _) => data.open,
-                  closeValueMapper: (DailyStockData data, _) => data.close)
+                  closeValueMapper: (DailyStockData data, _) => data.close,
+                  //volumeValueMapper: (DailyStockData data, _) => data.volume,
+
+              )
             ],
           ),
         ],
