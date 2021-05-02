@@ -46,6 +46,6 @@ class Style {
       fontWeight: Style.getFontWeight('thin'),
       color: Style.headingColor,
       fontSize: 18);
-  static TextStyle stockStatusPriceTextStyle = TextStyle(fontWeight: Style.getFontWeight('regular'),color: Style.headingColor,fontSize: 25);
+  static TextStyle stockStatusPriceTextStyle = TextStyle(fontWeight: Style.getFontWeight('bold'),color: Style.headingColor,fontSize: 16);
   static TextStyle stockStatusPriceVariationTextStyle = TextStyle(fontWeight: Style.getFontWeight('regular'),color: Style.headingColor,fontSize: 15);
 }

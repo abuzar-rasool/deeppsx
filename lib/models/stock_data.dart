@@ -62,11 +62,11 @@ class DailyStockData{
   int signal;
   DailyStockData();
   DailyStockData.fromPredictionList(List<dynamic> csvList){
-    date =  DateFormat("dd/MM/yyyy").parse(csvList[0]);
+    date = DateFormat("MM/dd/yyyy").parse(csvList[0]);
     predictedPrice = csvList[1];
   }
   DailyStockData.fromList(List<dynamic> csvList){
-    date =  DateFormat("dd/MM/yyyy").parse(csvList[0]);
+    date = DateFormat("MM/dd/yyyy").parse(csvList[0]);
     predictedPrice = csvList[1];
     originalPrice=csvList[2];
      sma=csvList[3];

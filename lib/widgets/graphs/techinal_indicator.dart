@@ -21,11 +21,11 @@ class _TechnicalIndicatorGraphState extends State<TechnicalIndicatorGraph> {
   ZoomPanBehavior _zoomPanBehavior;
   int mainXaxisVisibleDays = 100;
   List<bool> indicatorsVisible = [false, false, false];
-
+  List<String> indicators =['RSI', 'Bollinger Bands', 'MACD'];
   @override
   void initState() {
     super.initState();
-    _stockData = context.read<StockDataProvider>().currentStockData;
+
     _zoomPanBehavior =  ZoomPanBehavior(
         enableDoubleTapZooming: true,
         enablePanning: true
@@ -49,44 +49,33 @@ class _TechnicalIndicatorGraphState extends State<TechnicalIndicatorGraph> {
   }
   @override
   Widget build(BuildContext context) {
+    _stockData = context.watch<StockDataProvider>().currentStockData;
     return Container(
       child: Column(
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              DropdownButton<String>(
-                hint: Text("Indicators", style: TextStyle(color: Colors.white),),
-                items: <String>['RSI', 'Bollinger Bands', 'MACD'].map((String value) {
-                  return new DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-                onChanged: (indicator) {
-                  if (indicator == 'RSI') {
-                    indicatorsVisible[0] = !indicatorsVisible[0];
-                    setState(() {
-                    });
-
-                  }
-                  else if (indicator == 'Bollinger Bands') {
-                    indicatorsVisible[1] = !indicatorsVisible[1];
-                    setState(() {
-                    });
-                  }
-                  else if (indicator == 'MACD') {
-                    indicatorsVisible[2] = !indicatorsVisible[2];
-                    setState(() {
-
-                    });
-                  }
-                },
+              for(int i=0;i<indicators.length;i++) Row(
+                children: [
+                  Checkbox( value: indicatorsVisible[i],
+                    activeColor: Colors.white,
+                    checkColor: Style.primraryColor,
+                    onChanged: (bool value) {
+                      setState(() {
+                        indicatorsVisible[i] = value;
+                      });
+                    },
+                  ),
+                  Text(indicators[i],style: TextStyle(color: Colors.white,fontSize: 10),)
+                ],
               ),
+
+
               TextButton(
                   child: Text('+',
                     style: TextStyle(
-                        fontSize: 25,
+                        fontSize: 15,
                         color: Colors.white
                     ),
                   ),
@@ -98,7 +87,7 @@ class _TechnicalIndicatorGraphState extends State<TechnicalIndicatorGraph> {
               TextButton(
                   child: Text('-',
                     style: TextStyle(
-                        fontSize: 25,
+                        fontSize: 15,
                         color: Colors.white
                     ),
                   ),
@@ -132,7 +121,7 @@ class _TechnicalIndicatorGraphState extends State<TechnicalIndicatorGraph> {
               name: 'y-prim',
               majorGridLines: MajorGridLines(color: Style.textColor),
               minorGridLines: MinorGridLines(width: 0),
-
+              desiredIntervals: 5
             ),
 
             axes: [

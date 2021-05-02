@@ -1,42 +1,47 @@
 import 'package:deeppsx/models/signal.dart';
+import 'package:deeppsx/models/stock_data.dart';
 import 'package:deeppsx/style/style.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
+import 'package:provider/provider.dart';
 
 class RadialGuage extends StatefulWidget {
-  final Signal signal;
-  RadialGuage({Key key, this.signal}) : super(key: key);
+
+  RadialGuage({Key key}) : super(key: key);
 
   @override
-  _RadialGuageState createState() => _RadialGuageState(signal);
+  _RadialGuageState createState() => _RadialGuageState();
 }
 
 class _RadialGuageState extends State<RadialGuage> {
-  final Signal signal;
+  Signal signal;
   String _signalString;
   int _finalValue;
+  int _signalInt;
 
-  _RadialGuageState(this.signal){
-    _getFinalValue();
-    _getSignalString();
+  _RadialGuageState();
+
+  Signal _getSignal(int signalInt){
+    if(signalInt==0){
+      return Signal.Hold;
+    }else if (signalInt==1){
+      return Signal.Buy;
+    }else if (signalInt==-1){
+      return Signal.Sell;
+    }
   }
-
   _getFinalValue(){
     switch(signal){
       case Signal.Sell:{
         _finalValue=25;
       }
       break;
-      case Signal.StrongSell:{
+      case Signal.Hold:{
         _finalValue=50;
       }
       break;
       case Signal.Buy:{
         _finalValue=75;
-      }
-      break;
-      case Signal.StrongBuy:{
-        _finalValue=100;
       }
       break;
       default: {
@@ -52,19 +57,14 @@ class _RadialGuageState extends State<RadialGuage> {
           _signalString = 'Sell';
         }
         break;
-      case Signal.StrongSell:
-        {
-          _signalString = 'Strong Sell';
-        }
-        break;
       case Signal.Buy:
         {
           _signalString = 'Buy';
         }
         break;
-      case Signal.StrongBuy:
+      case Signal.Hold:
         {
-          _signalString = 'Strong Buy';
+          _signalString = 'Hold';
         }
         break;
       default:
@@ -75,7 +75,23 @@ class _RadialGuageState extends State<RadialGuage> {
   }
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _signalInt = context.read<StockDataProvider>().currentStockData.dailyDataWithoutPrediction.last.score;
+    signal=_getSignal(_signalInt);
+    _getFinalValue();
+    _getSignalString();
+  }
+
+  @override
   Widget build(BuildContext context) {
+      _signalInt = context.watch<StockDataProvider>().currentStockData.dailyDataWithoutPrediction.last.signal;
+      signal=_getSignal(_signalInt);
+      setState(() {
+        _getFinalValue();
+        _getSignalString();
+      });
     return _buildRadialNonLinearLabel();
   }
   /// Returns the non-linear axis label gauge

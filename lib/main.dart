@@ -27,6 +27,7 @@ class _DeepPsxState extends State<DeepPsx> {
         theme: ThemeData(
           primaryColor: Style.primraryColor,
           accentColor: Style.secondryColor,
+          unselectedWidgetColor: Colors.white,
           fontFamily: "Montserrat",
         ),
         home: DeepPsxHome(),

@@ -13,6 +13,6 @@ class GraphTabView extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     DeviceScreenType deviceType = getDeviceType(MediaQuery.of(context).size);
-    return CustomContainer(child:Container(child:child,width: double.infinity,height: deviceType == DeviceScreenType.mobile  ? size.height*0.50 : size.height*0.55,),borderRadius: 0);
+    return CustomContainer(child:Container(child:child,width: double.infinity,height: deviceType == DeviceScreenType.mobile  ? size.height*0.58 : size.height*0.58,),borderRadius: 0);
   }
 }

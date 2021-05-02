@@ -6,17 +6,37 @@ import 'package:flutter/material.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:provider/provider.dart';
 
-class SearchSection extends StatelessWidget {
+class SearchSection extends StatefulWidget {
   final SizingInformation sizingInformation;
-  const SearchSection({
+
+  SearchSection({
     @required this.sizingInformation,
     Key key,
   }) : super(key: key);
 
   @override
+  _SearchSectionState createState() => _SearchSectionState();
+}
+
+class _SearchSectionState extends State<SearchSection> {
+  List<StockData> _stockData = [];
+  List<StockData> _newDataList = [];
+  onItemChanged(String value) {
+      _newDataList = _stockData
+          .where((StockData data) => data.stockCode.toLowerCase().contains(value.toLowerCase()))
+          .toList();
+  }
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _stockData = context.read<StockDataProvider>().stocks;
+    _newDataList = _stockData;
+  }
+  @override
   Widget build(BuildContext context) {
     return ResponsiveContainer(
-      sizingInformation: sizingInformation,
+      sizingInformation: widget.sizingInformation,
       child: Container(
         padding: EdgeInsets.all(20),
         width: double.infinity,
@@ -24,6 +44,12 @@ class SearchSection extends StatelessWidget {
         child: Column(
           children: [
             TextField(
+              onChanged:(value){
+                setState(() {
+                  onItemChanged(value);
+                });
+
+              },
               cursorColor: Colors.white,
               minLines: 1,
               maxLength: 10,
@@ -50,9 +76,9 @@ class SearchSection extends StatelessWidget {
               height: 20,
             ),
             ListView.builder(
-              itemCount: context.read<StockDataProvider>().stocks.length,
+              itemCount: _newDataList.length,
               itemBuilder: (context, item) {
-                return SearchTile(stockCode: context.read<StockDataProvider>().stocks[item].stockCode);
+                return SearchTile(stockCode: _newDataList[item].stockCode);
               },
               shrinkWrap: true,
             )

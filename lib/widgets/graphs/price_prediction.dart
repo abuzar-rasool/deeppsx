@@ -17,7 +17,7 @@ class _PricePredicationGraphState extends State<PricePredicationGraph> {
   void initState() {
     super.initState();
     _tooltipBehavior = TooltipBehavior(enable: true, animationDuration: 1);
-    _stockData = context.read<StockDataProvider>().currentStockData;
+
   }
 
   List<double> getPredictionRanges(){
@@ -26,12 +26,12 @@ class _PricePredicationGraphState extends State<PricePredicationGraph> {
       result.add(element.predictedPrice);
       result.add(element.originalPrice);
     });
-    print(result);
     return result.where((element) => element!=null).toList();
   }
 
   @override
   Widget build(BuildContext context) {
+    _stockData = context.watch<StockDataProvider>().currentStockData;
     return Container(
       child: SfCartesianChart(
         tooltipBehavior: _tooltipBehavior,

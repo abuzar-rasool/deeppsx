@@ -6,19 +6,14 @@ import 'package:flutter/material.dart';
 
 
 class Indicator extends StatelessWidget {
-  final Signal signal;
-
-  Indicator({Key key, this.signal}) : super(key: key);
-
-
-
+  Indicator({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return CustomContainer(
       sectionTitle: 'Indicator',
       child: Column(
         children: [
-          RadialGuage(signal: signal,),
+          RadialGuage(),
         ],
       ),
     );

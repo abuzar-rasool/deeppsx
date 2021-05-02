@@ -10,15 +10,15 @@ class SentimentAnalysisGraph extends StatefulWidget {
 
 class _SentimentAnalysisGraphState extends State<SentimentAnalysisGraph> {
   StockData _stockData;
-
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    _stockData = context.read<StockDataProvider>().currentStockData;
+
   }
   @override
   Widget build(BuildContext context) {
+    _stockData= context.watch<StockDataProvider>().currentStockData;
     return SfCartesianChart(
       tooltipBehavior: TooltipBehavior(enable: true, animationDuration: 1),
       primaryXAxis: DateTimeAxis(

@@ -16,7 +16,6 @@ class DeepPsxHome extends StatefulWidget {
 }
 
 class _DeepPsxHomeState extends State<DeepPsxHome> {
-
   @override
   void initState() {
     // TODO: implement initState
@@ -25,29 +24,33 @@ class _DeepPsxHomeState extends State<DeepPsxHome> {
 
   @override
   Widget build(BuildContext context) {
-    return context.watch<StockDataProvider>().loading ? Center(child: CircularProgressIndicator(),) :ResponsiveBuilder(builder: (context, sizingInformation) {
-      return Scaffold(
-        resizeToAvoidBottomInset: true,
-        backgroundColor: Style.primraryColor,
-        body: SingleChildScrollView(
-          // physics: sizingInformation.isDesktop
-          //     ? NeverScrollableScrollPhysics()
-          //     : null,
-          child: Wrap(
-            children: [
-              StockAndLogoSection(
-                sizingInformation: sizingInformation,
+    return context.watch<StockDataProvider>().loading
+        ? Center(
+            child: CircularProgressIndicator(),
+          )
+        : ResponsiveBuilder(builder: (context, sizingInformation) {
+            return Scaffold(
+              resizeToAvoidBottomInset: true,
+              backgroundColor: Style.primraryColor,
+              body: SingleChildScrollView(
+                // physics: sizingInformation.isDesktop
+                //     ? NeverScrollableScrollPhysics()
+                //     : null,
+                child: Wrap(
+                  children: [
+                    StockAndLogoSection(
+                      sizingInformation: sizingInformation,
+                    ),
+                    IndicatorSection(
+                      sizingInformation: sizingInformation,
+                    ),
+                    SearchSection(
+                      sizingInformation: sizingInformation,
+                    ),
+                  ],
+                ),
               ),
-              IndicatorSection(
-                sizingInformation: sizingInformation,
-              ),
-              SearchSection(
-                sizingInformation: sizingInformation,
-              ),
-            ],
-          ),
-        ),
-      );
-    });
+            );
+          });
   }
 }

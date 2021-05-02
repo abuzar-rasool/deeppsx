@@ -19,26 +19,28 @@ class StockAndLogoSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return ResponsiveContainer(
       sizingInformation: sizingInformation,
-      child: Column(
-        children: [
-          LogoAndStockDetails(sizingInformation: sizingInformation,),
-          StockGraphs(
-            graphTabs: [
-              GraphTab(
-                tabName: 'PRICE PREDICTION',
-                child: PricePredicationGraph(),
-              ),
-              GraphTab(
-                tabName: 'SENTIMENT ANALYSIS',
-                child: SentimentAnalysisGraph(),
-              ),
-              GraphTab(
-                tabName: 'TECHNICAL INDICATORS',
-                child: TechnicalIndicatorGraph(),
-              ),
-            ],
-          )
-        ],
+      child: Container(
+        child: Column(
+          children: [
+            LogoAndStockDetails(sizingInformation: sizingInformation,),
+            StockGraphs(
+              graphTabs: [
+                GraphTab(
+                  tabName: 'PRICE PREDICTION',
+                  child: PricePredicationGraph(),
+                ),
+                GraphTab(
+                  tabName: 'SENTIMENT ANALYSIS',
+                  child: SentimentAnalysisGraph(),
+                ),
+                GraphTab(
+                  tabName: 'TECHNICAL INDICATORS',
+                  child: TechnicalIndicatorGraph(),
+                ),
+              ],
+            )
+          ],
+        ),
       ),
       desktopWidthFactor: 0.60,
     );
