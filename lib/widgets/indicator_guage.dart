@@ -17,17 +17,21 @@ class _RadialGuageState extends State<RadialGuage> {
   Signal signal;
   String _signalString;
   int _finalValue;
-  int _signalInt;
+ double  _signalInt;
 
   _RadialGuageState();
 
-  Signal _getSignal(int signalInt){
-    if(signalInt==0){
-      return Signal.Hold;
+  Signal _getSignal(double signalInt){
+    if(signalInt==-1){
+      return Signal.Sell;
+    }else if (signalInt==-0.5){
+      return Signal.SellHold;
+    }else if (signalInt==0.5){
+      return Signal.BuyHold;
     }else if (signalInt==1){
       return Signal.Buy;
-    }else if (signalInt==-1){
-      return Signal.Sell;
+    }else{
+      return Signal.Buy;
     }
   }
   _getFinalValue(){
@@ -36,11 +40,11 @@ class _RadialGuageState extends State<RadialGuage> {
         _finalValue=25;
       }
       break;
-      case Signal.Hold:{
+      case Signal.SellHold:{
         _finalValue=50;
       }
       break;
-      case Signal.Buy:{
+      case Signal.BuyHold:{
         _finalValue=75;
       }
       break;
@@ -57,19 +61,19 @@ class _RadialGuageState extends State<RadialGuage> {
           _signalString = 'Sell';
         }
         break;
-      case Signal.Buy:
+      case Signal.BuyHold:
         {
-          _signalString = 'Buy';
+          _signalString = 'Buy Hold';
         }
         break;
-      case Signal.Hold:
+      case Signal.SellHold:
         {
-          _signalString = 'Hold';
+          _signalString = 'Sell Hold';
         }
         break;
       default:
         {
-          _signalString = 'Strong Buy';
+          _signalString = 'Buy';
         }
     }
   }

@@ -20,11 +20,15 @@ class _SentimentAnalysisGraphState extends State<SentimentAnalysisGraph> {
   Widget build(BuildContext context) {
     _stockData= context.watch<StockDataProvider>().currentStockData;
     return SfCartesianChart(
+      zoomPanBehavior: ZoomPanBehavior(enablePanning: true),
       tooltipBehavior: TooltipBehavior(enable: true, animationDuration: 1),
       primaryXAxis: DateTimeAxis(
-        enableAutoIntervalOnZooming: true,
+        zoomFactor: 0.5,
+        zoomPosition: 1,
+        intervalType: DateTimeIntervalType.days,
+        desiredIntervals: 9,
         interactiveTooltip: InteractiveTooltip(enable: true,),
-        majorGridLines: MajorGridLines(color: Style.textColor),
+        majorGridLines: MajorGridLines(width: 1, color: Style.textColor),
         minorGridLines: MinorGridLines(width: 1, color: Style.textColor),
       ),
       primaryYAxis: NumericAxis(
@@ -32,14 +36,16 @@ class _SentimentAnalysisGraphState extends State<SentimentAnalysisGraph> {
         desiredIntervals: 2,
         visibleMaximum:1,
         visibleMinimum: -1,
-        majorGridLines: MajorGridLines(color: Style.textColor),
+        majorGridLines: MajorGridLines(width: 1, color: Style.textColor),
         minorGridLines: MinorGridLines(width: 1, color: Style.textColor),
       ),
       series : [
         ColumnSeries<DailyStockData, DateTime>(
+
             dataSource: _stockData.dailyData,
             xValueMapper: (DailyStockData data, _) => data.date.isBefore(_stockData.currentDate) && data.date.isAfter(_stockData.currentDate.subtract(Duration(days: 30))) ? data.date :null,
             yValueMapper: (DailyStockData data, _) => data.date.isBefore(_stockData.currentDate) && data.date.isAfter(_stockData.currentDate.subtract(Duration(days: 30)))  ? data.signal :null,
+            pointColorMapper: (DailyStockData data, _) => data.date.isBefore(_stockData.currentDate) && data.date.isAfter(_stockData.currentDate.subtract(Duration(days: 30)))  ? data.signal==1 ? Style.logoColorBlue : Style.logoColorPink :null,
           enableTooltip: true,
         )
       ],

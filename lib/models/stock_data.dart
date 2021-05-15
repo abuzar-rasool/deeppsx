@@ -59,7 +59,7 @@ class DailyStockData{
   double close;
   double volume;
   int score;
-  int signal;
+  double signal;
   DailyStockData();
   DailyStockData.fromPredictionList(List<dynamic> csvList){
     date = DateFormat("MM/dd/yyyy").parse(csvList[0]);

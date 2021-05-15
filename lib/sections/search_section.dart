@@ -7,7 +7,7 @@ import 'package:responsive_builder/responsive_builder.dart';
 import 'package:provider/provider.dart';
 
 class SearchSection extends StatefulWidget {
-  final SizingInformation sizingInformation;
+  SizingInformation sizingInformation;
 
   SearchSection({
     @required this.sizingInformation,
@@ -75,22 +75,17 @@ class _SearchSectionState extends State<SearchSection> {
             SizedBox(
               height: 20,
             ),
-            ListView.builder(
-              itemCount: _newDataList.length,
-              itemBuilder: (context, item) {
-                return SearchTile(stockCode: _newDataList[item].stockCode);
-              },
-              shrinkWrap: true,
+            Container(
+              height: widget.sizingInformation.isDesktop ? widget.sizingInformation.screenSize.height*0.80 : 500,
+              child: ListView.builder(
+                itemCount: _newDataList.length,
+                itemBuilder: (context, item) {
+                  return SearchTile(stockCode: _newDataList[item].stockCode);
+                },
+                shrinkWrap: true,
+              ),
             )
-            // Container(
-            //   decoration: BoxDecoration(
-            //     color: Style.primraryColor,
-            //     border: ,
-            //   ),
-            //   width: double.infinity,
-            //   height: 80,
-            //
-            // )
+
           ],
         ),
       ),

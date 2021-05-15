@@ -1,5 +1,6 @@
 enum Signal{
-  Hold,
   Buy,
-  Sell
+  Sell,
+  BuyHold,
+  SellHold,
 }
