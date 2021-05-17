@@ -13,11 +13,12 @@ class PricePredicationGraph extends StatefulWidget {
 class _PricePredicationGraphState extends State<PricePredicationGraph> {
   StockData _stockData;
   TooltipBehavior _tooltipBehavior;
+  TrackballBehavior _trackballBehavior;
   @override
   void initState() {
     super.initState();
     _tooltipBehavior = TooltipBehavior(enable: true, animationDuration: 1);
-
+    _trackballBehavior = TrackballBehavior(enable: true);
   }
 
   List<double> getPredictionRanges(){
@@ -35,12 +36,14 @@ class _PricePredicationGraphState extends State<PricePredicationGraph> {
     return Container(
       child: SfCartesianChart(
         tooltipBehavior: _tooltipBehavior,
+        trackballBehavior: _trackballBehavior,
         zoomPanBehavior: ZoomPanBehavior(enablePanning: true),
         plotAreaBorderColor: Style.textColor,
         primaryXAxis: DateTimeAxis(
+          enableAutoIntervalOnZooming: false,
           minimum: _stockData.currentDate.subtract(Duration(days: 7)),
-          zoomFactor: 0.2,
-          zoomPosition: 0.2,
+          // zoomFactor: 0.2,
+          // zoomPosition: 0.2,
           autoScrollingMode: AutoScrollingMode.end,
           dateFormat: DateFormat('MMM dd'),
           labelIntersectAction: AxisLabelIntersectAction.multipleRows,
@@ -75,6 +78,9 @@ class _PricePredicationGraphState extends State<PricePredicationGraph> {
             pointColorMapper: (DailyStockData data, _) => Style.logoColorBlue,
             enableTooltip: true,
             name: 'Original Price',
+              markerSettings: MarkerSettings(
+                  isVisible: true
+              )
           ),
           LineSeries<DailyStockData, DateTime>(
             dataSource: _stockData.dailyData,
@@ -88,6 +94,9 @@ class _PricePredicationGraphState extends State<PricePredicationGraph> {
             pointColorMapper: (DailyStockData data, _) => Style.logoColorPink,
             enableTooltip: true,
             name: 'Price Prediction',
+              markerSettings: MarkerSettings(
+                  isVisible: true
+              )
           ),
         ],
       ),
