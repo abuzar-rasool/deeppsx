@@ -18,7 +18,7 @@ class _PricePredicationGraphState extends State<PricePredicationGraph> {
   void initState() {
     super.initState();
     _tooltipBehavior = TooltipBehavior(enable: true, animationDuration: 1);
-    _trackballBehavior = TrackballBehavior(enable: true);
+    _trackballBehavior = TrackballBehavior(enable: false);
   }
 
   List<double> getPredictionRanges(){
@@ -68,20 +68,7 @@ class _PricePredicationGraphState extends State<PricePredicationGraph> {
           ),
         ),
         series: <ChartSeries>[
-          LineSeries<DailyStockData, DateTime>(
-            dataSource: _stockData.dailyData.where((element) => element.date.isAfter(_stockData.currentDate.subtract(Duration(days: 14)))).toList(),
-            xValueMapper: (DailyStockData data, _) => data.date,
-            yValueMapper: (DailyStockData data, _) =>
-                data.date.isAfter(_stockData.currentDate)
-                    ? null
-                    : data.originalPrice,
-            pointColorMapper: (DailyStockData data, _) => Style.logoColorBlue,
-            enableTooltip: true,
-            name: 'Original Price',
-              markerSettings: MarkerSettings(
-                  isVisible: true
-              )
-          ),
+
           LineSeries<DailyStockData, DateTime>(
             dataSource: _stockData.dailyData,
             xValueMapper: (DailyStockData data, _) => data.date,
@@ -94,6 +81,20 @@ class _PricePredicationGraphState extends State<PricePredicationGraph> {
             pointColorMapper: (DailyStockData data, _) => Style.logoColorPink,
             enableTooltip: true,
             name: 'Price Prediction',
+              markerSettings: MarkerSettings(
+                  isVisible: true
+              )
+          ),
+          LineSeries<DailyStockData, DateTime>(
+              dataSource: _stockData.dailyData.where((element) => element.date.isAfter(_stockData.currentDate.subtract(Duration(days: 14)))).toList(),
+              xValueMapper: (DailyStockData data, _) => data.date,
+              yValueMapper: (DailyStockData data, _) =>
+              data.date.isAfter(_stockData.currentDate)
+                  ? null
+                  : data.originalPrice,
+              pointColorMapper: (DailyStockData data, _) => Style.logoColorBlue,
+              enableTooltip: true,
+              name: 'Original Price',
               markerSettings: MarkerSettings(
                   isVisible: true
               )
